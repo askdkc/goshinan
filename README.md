@@ -42,6 +42,11 @@ Node.js 26.5.0で`package`と`make`が完了することを確認済みです。
 ```powershell
 winget install --id OpenJS.NodeJS --exact --version 26.5.0
 ```
+nodeによるスクリプト実行が弾かれることがあるのでPowerShellを管理者として実行して、次のスクリプトでnodeを許可してください。
+
+```powershell
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
 
 インストール後は開いているターミナルをすべて閉じ、新しいPowerShellを開いて確認します。
 
@@ -83,6 +88,7 @@ Intel Macでは`--arch=x64`を指定し、x64コードを含むKataGoを用意�
 ### Windows x64
 
 ```powershell
+npm i
 npm run resources:fetch -- --platform=win32 --arch=x64
 ```
 

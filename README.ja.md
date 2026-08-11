@@ -184,6 +184,12 @@ Node.js公式の[Node.js 26.5.0リリースページ](https://nodejs.org/en/blog
 winget install --id OpenJS.NodeJS --exact --version 26.5.0
 ```
 
+nodeによるスクリプト実行が弾かれることがあるのでPowerShellを管理者として実行して、次のスクリプトでnodeを許可してください。
+
+```powershell
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
 導入後は開いているターミナルをすべて閉じ、新しいPowerShellで確認します。
 
 ```powershell
@@ -208,6 +214,8 @@ Node.js 26をインストールしただけでは使用バージョンが切り�
 - Node.js 26.x
 - Squirrel.Windows 用のパッケージメタデータ
 - 一般配布する場合は Windows コード署名環境
+
+#### Windows版の注意事項
 
 Squirrel.Windows は `author` と `description` を必要とします。現在の
 `package.json` には `description` はありますが `author` はありません。実際の
@@ -238,6 +246,7 @@ out/Go Shinan-win32-x64/
 ### Squirrel.Windows インストーラーを作る
 
 ```powershell
+npm i
 npm run make -- --platform=win32 --arch=x64
 ```
 
