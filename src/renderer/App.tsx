@@ -367,7 +367,9 @@ export function App() {
     const coachingNote =
       state.coaching === undefined
         ? undefined
-        : `Go Shinan coaching: retry after ${pointToGtp(state.coaching.played)} lost ${state.coaching.assessment.scoreLoss.toFixed(2)} points; suggested ${pointToGtp(state.coaching.recommended)}.`;
+        : state.settings.language === "ja"
+          ? `碁指南: ${pointToGtp(state.coaching.played)}で${state.coaching.assessment.scoreLoss.toFixed(2)}目を損したため打ち直し。推奨手は${pointToGtp(state.coaching.recommended)}。`
+          : `Go Shinan coaching: retry after ${pointToGtp(state.coaching.played)} lost ${state.coaching.assessment.scoreLoss.toFixed(2)} points; suggested ${pointToGtp(state.coaching.recommended)}.`;
     const validated = await window.goShinan.validateMove({
       snapshot: baseSnapshot,
       point,
@@ -378,7 +380,10 @@ export function App() {
       dispatch({
         type: "phase",
         phase: state.coaching === undefined ? "ready" : "coaching",
-        notice: validated.error ?? t("illegal"),
+        notice:
+          state.settings.language === "ja"
+            ? t("illegal")
+            : (validated.error ?? t("illegal")),
       });
       return;
     }
@@ -516,7 +521,12 @@ export function App() {
       dispatch({
         type: "phase",
         phase: state.phase,
-        notice: error instanceof Error ? error.message : String(error),
+        notice:
+          state.settings.language === "ja"
+            ? t("fileError")
+            : error instanceof Error
+              ? error.message
+              : String(error),
       });
     }
   };
@@ -533,7 +543,10 @@ export function App() {
       dispatch({
         type: "phase",
         phase: state.phase,
-        notice: `${t("sgfError")}: ${error instanceof Error ? error.message : String(error)}`,
+        notice:
+          state.settings.language === "ja"
+            ? t("sgfError")
+            : `${t("sgfError")}: ${error instanceof Error ? error.message : String(error)}`,
       });
     }
   };
@@ -639,13 +652,16 @@ export function App() {
                 {Array.from({ length: 9 }, (_, index) => index + 1).map(
                   (rank) => (
                     <option key={rank} value={rank}>
-                      {rank} dan
+                      {state.settings.language === "ja"
+                        ? `${rank}段`
+                        : `${rank} dan`}
                     </option>
                   ),
                 )}
               </select>
               <span>
-                {t("approximate")} {state.settings.difficulty} dan
+                {t("approximate")} {state.settings.difficulty}
+                {state.settings.language === "ja" ? "段" : " dan"}
               </span>
             </div>
             <div className="toggle-row">
@@ -685,7 +701,9 @@ export function App() {
             <section className="analysis-card">
               <div className="eyebrow">{t("engine")}</div>
               <p>
-                {state.engine.message ??
+                {(state.settings.language === "en"
+                  ? state.engine.message
+                  : undefined) ??
                   (state.engine.state === "missing"
                     ? t("noEngine")
                     : engineLabel(state.engine, t))}

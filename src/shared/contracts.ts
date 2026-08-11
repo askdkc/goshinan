@@ -14,7 +14,7 @@ export interface AppSettings {
 
 export const DEFAULT_SETTINGS: AppSettings = {
   difficulty: 3,
-  language: "en",
+  language: "ja",
   showCandidates: false,
   showOwnership: false,
 };

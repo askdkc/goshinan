@@ -34,20 +34,21 @@ const manifestPath = path.join(resourceRoot, "manifest.json");
 const sourcesPath = path.join(resourceRoot, "sources.json");
 const supportedTargets = new Set(["darwin-arm64", "darwin-x64", "win32-x64"]);
 
-const usage = `Usage:
+const usage = `使い方:
   npm run resources:fetch -- --platform=darwin --arch=arm64
   npm run resources:fetch -- --platform=darwin --arch=x64
   npm run resources:fetch -- --platform=win32 --arch=x64
 
-Options:
-  --platform <darwin|win32>  Target operating system (default: current host)
-  --arch <arm64|x64>         Target CPU (default: current host)
-  --katago-binary <path>     macOS KataGo executable to bundle
-  --help                     Show this help
+オプション:
+  --platform <darwin|win32>  対象OS（既定値: 現在のOS）
+  --arch <arm64|x64>         対象CPU（既定値: 現在のCPU）
+  --katago-binary <path>     同梱するmacOS版KataGoの実行ファイル
+  --help                     このヘルプを表示
 
-macOS does not have an official precompiled KataGo release asset. Install it
-with "brew install katago", or pass --katago-binary. The command copies the
-binary and its non-system dynamic libraries; it never installs Homebrew itself.`;
+KataGo公式はコンパイル済みmacOS版を配布していません。先に
+"brew install katago"を実行するか、--katago-binaryを指定してください。
+このコマンドは実行ファイルと非システム動的ライブラリをコピーしますが、
+Homebrew自体のインストールは行いません。`;
 
 const parseArguments = (arguments_) => {
   const options = {
@@ -59,7 +60,7 @@ const parseArguments = (arguments_) => {
   const takeValue = (index, name) => {
     const value = arguments_[index + 1];
     if (value === undefined || value.startsWith("--"))
-      throw new Error(`${name} requires a value`);
+      throw new Error(`${name}には値が必要です`);
     return value;
   };
 
@@ -83,7 +84,7 @@ const parseArguments = (arguments_) => {
       options.katagoBinary = takeValue(index, argument);
       index += 1;
     } else {
-      throw new Error(`Unknown option: ${argument}`);
+      throw new Error(`不明なオプションです: ${argument}`);
     }
   }
   return options;
@@ -114,7 +115,7 @@ const download = async (asset) => {
   const destination = path.join(cacheRoot, asset.sourceName ?? asset.fileName);
   if (await verifyFile(destination, asset.sha256, asset.bytes)) {
     console.log(
-      `Using verified cache: ${path.relative(projectRoot, destination)}`,
+      `検証済みキャッシュを使用: ${path.relative(projectRoot, destination)}`,
     );
     return destination;
   }
@@ -122,7 +123,7 @@ const download = async (asset) => {
   await rm(destination, { force: true });
   const partial = `${destination}.${process.pid}.part`;
   await rm(partial, { force: true });
-  console.log(`Downloading: ${asset.url}`);
+  console.log(`ダウンロード中: ${asset.url}`);
   try {
     const response = await fetch(asset.url, {
       redirect: "follow",
@@ -134,7 +135,7 @@ const download = async (asset) => {
     const contentLength = response.headers.get("content-length");
     if (contentLength !== null && Number(contentLength) !== asset.bytes) {
       throw new Error(
-        `Unexpected Content-Length for ${asset.sourceName ?? asset.fileName}: ${contentLength}`,
+        `${asset.sourceName ?? asset.fileName}のContent-Lengthが想定と異なります: ${contentLength}`,
       );
     }
     await pipeline(
@@ -143,7 +144,7 @@ const download = async (asset) => {
     );
     if (!(await verifyFile(partial, asset.sha256, asset.bytes)))
       throw new Error(
-        `SHA-256 or size mismatch for ${asset.sourceName ?? asset.fileName}`,
+        `${asset.sourceName ?? asset.fileName}のSHA-256またはサイズが一致しません`,
       );
     await rename(partial, destination);
     return destination;
@@ -163,7 +164,7 @@ const installFile = async (source, destination, expectedHash, executable) => {
     if (expectedHash !== undefined) {
       const actual = await sha256(temporary);
       if (actual !== expectedHash)
-        throw new Error(`Copied file checksum mismatch: ${destination}`);
+        throw new Error(`コピー後のチェックサムが一致しません: ${destination}`);
     }
     await rm(destination, { force: true });
     await rename(temporary, destination);
@@ -221,22 +222,20 @@ const inspectMacBinary = async (binaryPath, targetArch, minimumVersion) => {
   const versionOutput = `${stdout}\n${stderr}`;
   const match = /KataGo v(\d+\.\d+\.\d+)/.exec(versionOutput);
   if (match === null)
-    throw new Error(`Cannot determine KataGo version: ${binaryPath}`);
+    throw new Error(`KataGoのバージョンを判定できません: ${binaryPath}`);
   if (!versionAtLeast(match[1], minimumVersion)) {
     throw new Error(
-      `KataGo ${match[1]} is too old; version ${minimumVersion} or newer is required`,
+      `KataGo ${match[1]}は古すぎます。${minimumVersion}以降が必要です`,
     );
   }
   const architectures = architecture.stdout.trim().split(/\s+/);
   if (!architectures.includes(targetArch)) {
     throw new Error(
-      `KataGo binary does not contain ${targetArch}; found: ${architectures.join(", ")}`,
+      `KataGo実行ファイルに${targetArch}コードがありません。検出結果: ${architectures.join(", ")}`,
     );
   }
   if (!/Using Metal backend/i.test(versionOutput))
-    console.warn(
-      "Warning: the selected macOS KataGo binary is not a Metal build.",
-    );
+    console.warn("警告: 選択したmacOS版KataGoはMetalビルドではありません。");
   return match[1];
 };
 
@@ -444,9 +443,7 @@ const extractZip = async (archive, destination) => {
     );
   } else {
     if (!(await commandExists("unzip")))
-      throw new Error(
-        "The unzip command is required to extract the Windows archive",
-      );
+      throw new Error("Windows用アーカイブの展開にはunzipコマンドが必要です");
     await execFileAsync("unzip", ["-q", archive, "-d", destination], {
       timeout: 120_000,
     });
@@ -462,7 +459,7 @@ const bundleWindowsBinary = async (archive, destination, version) => {
       (filePath) => path.basename(filePath).toLowerCase() === "katago.exe",
     );
     if (binary === undefined)
-      throw new Error("katago.exe is missing from the archive");
+      throw new Error("アーカイブ内にkatago.exeがありません");
     await installFile(binary, destination, undefined, true);
 
     const dependencies = [];
@@ -485,7 +482,7 @@ const bundleWindowsBinary = async (archive, destination, version) => {
 };
 
 const smokeTestEngine = async ({ binary, normalModel, humanModel, config }) => {
-  console.log("Starting KataGo model smoke test...");
+  console.log("KataGoモデルの起動確認を開始します…");
   const child = spawn(
     binary,
     [
@@ -574,11 +571,11 @@ const smokeTestEngine = async ({ binary, normalModel, humanModel, config }) => {
     !models.some((model) => model.usesHumanSLProfile !== true)
   ) {
     throw new Error(
-      "KataGo did not load both the normal model and the Human SL model",
+      "KataGoが通常モデルとHuman SLモデルの両方を読み込めませんでした",
     );
   }
   console.log(
-    `Smoke test passed: KataGo ${versionResult?.version ?? "unknown"}, ${models.length} models loaded.`,
+    `起動確認に成功: KataGo ${versionResult?.version ?? "不明"}、${models.length}個のモデルを読み込みました。`,
   );
 };
 
@@ -595,7 +592,7 @@ const updateManifest = async ({
   const manifest = JSON.parse(manifestText);
   const target = manifest.platforms?.[targetKey];
   if (target === undefined)
-    throw new Error(`Manifest target is missing: ${targetKey}`);
+    throw new Error(`manifestに対象環境がありません: ${targetKey}`);
   target.binary.sha256 = await sha256(
     path.join(resourceRoot, target.binary.path),
   );
@@ -623,19 +620,19 @@ const main = async () => {
   const targetKey = `${options.platform}-${options.arch}`;
   if (!supportedTargets.has(targetKey)) {
     throw new Error(
-      `Unsupported target: ${targetKey}. Supported targets: ${[...supportedTargets].join(", ")}`,
+      `未対応の対象環境です: ${targetKey}。対応対象: ${[...supportedTargets].join(", ")}`,
     );
   }
 
   const sources = JSON.parse(await readFile(sourcesPath, "utf8"));
   const source = sources.platforms[targetKey];
-  console.log(`Preparing KataGo resources for ${targetKey}`);
+  console.log(`${targetKey}用のKataGoリソースを準備します`);
 
   let macBinary;
   if (source.kind === "homebrew") {
     if (process.platform !== "darwin") {
       throw new Error(
-        "macOS KataGo resources must be prepared on macOS so Mach-O dependencies can be inspected",
+        "Mach-O依存関係を検査するため、macOS用KataGoリソースはmacOS上で準備してください",
       );
     }
     macBinary =
@@ -644,10 +641,10 @@ const main = async () => {
         : path.resolve(options.katagoBinary);
     if (macBinary === undefined) {
       throw new Error(
-        'KataGo was not found on PATH. Run "brew install katago", then retry; or pass --katago-binary <path>.',
+        'KataGoがPATH上に見つかりません。"brew install katago"を実行してから再試行するか、--katago-binary <path>を指定してください。',
       );
     }
-    console.log(`Found local KataGo: ${macBinary}`);
+    console.log(`ローカルのKataGoを検出: ${macBinary}`);
   }
 
   const [normalCache, humanCache] = await Promise.all([
@@ -684,7 +681,7 @@ const main = async () => {
       source.version,
     );
   } else {
-    console.log(`Bundling local KataGo: ${macBinary}`);
+    console.log(`ローカルのKataGoを同梱: ${macBinary}`);
     binaryResult = await bundleMacBinary(
       macBinary,
       binaryDestination,
@@ -706,15 +703,17 @@ const main = async () => {
     humanModel: sources.humanModel,
   });
   console.log(
-    `KataGo ${binaryResult.version} resources are ready for ${targetKey}.`,
+    `${targetKey}用のKataGo ${binaryResult.version}リソースを準備しました。`,
   );
-  console.log(`Manifest updated: ${path.relative(projectRoot, manifestPath)}`);
+  console.log(
+    `manifestを更新しました: ${path.relative(projectRoot, manifestPath)}`,
+  );
 };
 
 if (path.resolve(process.argv[1] ?? "") === scriptPath) {
   main().catch((error) => {
     console.error(
-      `resources:fetch failed: ${error instanceof Error ? error.message : String(error)}`,
+      `resources:fetchに失敗しました: ${error instanceof Error ? error.message : String(error)}`,
     );
     process.exitCode = 1;
   });

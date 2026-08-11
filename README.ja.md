@@ -1,6 +1,6 @@
 # Go Shinan（碁指南）
 
-[English README](README.md)
+[概要と最短手順](README.md)
 
 Go Shinan は、ローカルの KataGo を使って着手を評価する、オフラインの
 Electron デスクトップ囲碁コーチです。この文書では Windows と macOS 向けの
@@ -17,7 +17,7 @@ Electron デスクトップ囲碁コーチです。この文書では Windows �
   platform key、deb/RPM maker、実機テストがないため、本書では Linux の
   ビルド手順を扱いません。
 - KataGo 実行ファイルとニューラルネットワークはリポジトリに含まれません。
-  それらを追加しない場合もアプリは起動しますが、`Assets missing` と表示され、
+  それらを追加しない場合もアプリは起動しますが、「素材不足」と表示され、
   KataGo 対局・解析・コーチングは動作しません。
 - 現在の署名・公証設定は開発用です。そのままの成果物を一般配布しないでください。
 
@@ -28,8 +28,8 @@ Electron Forge は、原則として実行中の OS と CPU 向けにビルド�
 ## 共通要件
 
 - Git
-- Node.js 22.12 以上
-- npm 10 以上を推奨
+- Node.js 26.x（26.5.0で動作確認済み）
+- npm 11.x
 - macOS の場合は Homebrew 版 KataGo、または自分でビルドした Metal 版 KataGo
 - KataGo モデル、Electron、Forge の補助ファイルを取得するためのビルド時ネットワーク接続
 
@@ -40,18 +40,24 @@ node --version
 npm --version
 ```
 
-このプロジェクトは Node.js 18 ではビルドしません。macOS 上で Homebrew の
-Node.js 22 を明示的に使う場合は、各コマンドの前に次を付けます。
-
-```sh
-PATH=/opt/homebrew/opt/node@22/bin:$PATH npm ci
-```
-
-通常の環境では次で依存関係を再現できます。
+このプロジェクトのパッケージ作成はNode.js 26.xに固定しています。依存関係は次で
+ロックファイルどおりに再現します。
 
 ```sh
 npm ci
 ```
+
+Node.js 24.16以降および26では、Forge 7.11.2が内部利用する`extract-zip`の
+`yauzl` 2.10.0により、パッケージ処理が`Copying files`のまま終了しない問題があります。
+このリポジトリでは`package.json`の`overrides`で`yauzl` 3.3.1へ固定しています。
+さらに`prepackage`と`premake`でNode.jsと`yauzl`の実バージョンを検査し、古い依存関係へ
+戻った場合は無限に待たず日本語のエラーで停止します。
+
+```sh
+npm ls yauzl
+```
+
+`yauzl@3.3.1 overridden`と表示されることを確認してください。
 
 ## KataGo リソースの準備
 
@@ -83,7 +89,7 @@ npm run resources:fetch -- --platform=win32 --arch=x64
 
 `npm ci`、`npm install`、`npm start`、アプリの初回起動からは暗黙に実行しません。
 大容量ダウンロードとネイティブファイルの変更を依存関係インストールの副作用に
-しないためです。リソースがない場合、アプリは`Assets missing`状態で起動します。
+しないためです。リソースがない場合、アプリは「素材不足」状態で起動します。
 
 ### macOSでのKataGo準備
 
@@ -166,10 +172,40 @@ maker を使って ZIP や EXE などの配布物を `out/make/` に作ります
 
 ## Windows x64
 
+### Node.js 26のインストール
+
+Node.js公式の[Node.js 26.5.0リリースページ](https://nodejs.org/en/blog/release/v26.5.0)
+から「Windows 64-bit Installer（`.msi`）」をダウンロードして実行します。
+インストーラーでは既定の構成を使用し、npmとPATHへの追加を無効にしないでください。
+
+`winget`を使用する場合は、管理者権限のPowerShellまたはWindows Terminalで実行します。
+
+```powershell
+winget install --id OpenJS.NodeJS --exact --version 26.5.0
+```
+
+導入後は開いているターミナルをすべて閉じ、新しいPowerShellで確認します。
+
+```powershell
+node --version
+npm --version
+where.exe node
+```
+
+期待値はNode.js `v26.5.0`とnpm 11.xです。`where.exe node`は通常
+`C:\Program Files\nodejs\node.exe`を表示します。
+
+`node`が見つからない場合は、Windowsへサインインし直すか再起動してPATHを反映します。
+Node.js 22や24など別のバージョンが表示される場合は、`where.exe node`に出た各パスを
+確認してください。古いNode.js、nvm-windows、Voltaなどが先に読まれている状態では、
+Node.js 26をインストールしただけでは使用バージョンが切り替わりません。
+
+`winget`で26.5.0が見つからない場合は、公式リリースページのMSIを使用してください。
+
 ### 要件
 
 - 64-bit Windows
-- Node.js 22.12 以上
+- Node.js 26.x
 - Squirrel.Windows 用のパッケージメタデータ
 - 一般配布する場合は Windows コード署名環境
 
@@ -230,7 +266,7 @@ binary を生成する設定ではありません。
 ### 要件
 
 - macOS
-- Node.js 22.12 以上
+- Node.js 26.x
 - Xcode Command Line Tools
 - 一般配布する場合は Apple Developer Program の証明書と公証資格情報
 
@@ -246,7 +282,6 @@ xcode-select -p
 npm ci
 brew install katago
 npm run resources:fetch -- --platform=darwin --arch=arm64
-npm run package -- --platform=darwin --arch=arm64
 npm run make -- --platform=darwin --arch=arm64
 ```
 
@@ -256,9 +291,10 @@ npm run make -- --platform=darwin --arch=arm64
 npm ci
 brew install katago
 npm run resources:fetch -- --platform=darwin --arch=x64
-npm run package -- --platform=darwin --arch=x64
 npm run make -- --platform=darwin --arch=x64
 ```
+
+`make`は内部で`package`を実行するため、両方を続けて実行する必要はありません。
 
 現在の maker は macOS 用 ZIP を生成します。成果物は次です。
 
@@ -295,12 +331,12 @@ app-specific password、API private key をソースへ直書きしないでく�
 
 ## よくある失敗
 
-### `Assets missing`
+### 「素材不足」
 
 KataGo またはモデルが未配置、`manifest.json` が未更新、対象 platform key がない、
 あるいは SHA-256 が不一致です。対象OS上で`resources:fetch`を再実行してください。
 
-### `KataGo was not found`（macOS）
+### 「KataGoがPATH上に見つかりません」（macOS）
 
 `brew install katago`を実行するか、検証済みMetal版KataGoの絶対パスを
 `--katago-binary`で指定してください。Intel x64用を作る場合はx64コードを含む
@@ -329,6 +365,20 @@ chmod +x resources/katago/bin/<target>/katago
 Electron または Forge のビルド補助ファイルを取得できていません。ビルド環境の DNS、
 proxy、firewall、GitHub への接続を確認してください。
 
+### `Copying files`のまま5分以上終了しない
+
+Node.js 24.16以降または26と古い`yauzl` 2.10.0の組み合わせによる既知の問題です。
+このリポジトリの`package.json`と`package-lock.json`を使用して`npm ci`をやり直し、
+次の期待値を確認してください。
+
+```sh
+node --version
+npm ls yauzl
+```
+
+Node.js 26.x、`yauzl@3.3.1 overridden`であれば、ビルド前検査を通過します。
+手元で変更した`overrides`を削除したり、`package-lock.json`を古い状態へ戻したりしないでください。
+
 ### macOS で「開発元を確認できない」
 
 開発ビルドが未署名・未公証です。利用者へ Gatekeeper を無効化させるのではなく、
@@ -342,6 +392,7 @@ proxy、firewall、GitHub への接続を確認してください。
 ## 参考資料
 
 - [Electron Forge: Build Lifecycle](https://www.electronforge.io/core-concepts/build-lifecycle)
+- [Electron Forge issue #4277: Node.js 24.16/26でpackageが終了しない問題](https://github.com/electron/forge/issues/4277)
 - [Electron Forge: Configuration](https://www.electronforge.io/config/configuration)
 - [Electron Forge: Makers](https://www.electronforge.io/config/makers)
 - [Squirrel.Windows maker](https://www.electronforge.io/config/makers/squirrel.windows)

@@ -185,9 +185,9 @@ export const registerIpcHandlers = (
       }
       const window = getWindow();
       const options = {
-        title: "Save SGF",
-        defaultPath: "game.sgf",
-        filters: [{ name: "Smart Game Format", extensions: ["sgf"] }],
+        title: "SGFを保存",
+        defaultPath: "対局.sgf",
+        filters: [{ name: "SGF（囲碁棋譜）", extensions: ["sgf"] }],
       };
       const result =
         window === null
@@ -204,9 +204,9 @@ export const registerIpcHandlers = (
     trusted(async () => {
       const window = getWindow();
       const options: Electron.OpenDialogOptions = {
-        title: "Load SGF",
+        title: "SGFを読み込む",
         properties: ["openFile"],
-        filters: [{ name: "Smart Game Format", extensions: ["sgf"] }],
+        filters: [{ name: "SGF（囲碁棋譜）", extensions: ["sgf"] }],
       };
       const result =
         window === null

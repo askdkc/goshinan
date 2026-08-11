@@ -1,10 +1,10 @@
-# KataGo resource payload
+# KataGoリソース
 
-This directory is copied to Electron `extraResources`, outside `app.asar`.
-Executables, dynamic libraries, models, downloads, and caches are generated
-locally and excluded from Git.
+このディレクトリはElectronの`extraResources`として、`app.asar`の外側へコピーされます。
+実行ファイル、動的ライブラリ、モデル、ダウンロード、一時キャッシュはローカルで生成し、
+Gitには登録しません。
 
-Prepare a target with:
+対象環境のリソースは次のコマンドで準備します。
 
 ```sh
 npm run resources:fetch -- --platform=darwin --arch=arm64
@@ -12,28 +12,45 @@ npm run resources:fetch -- --platform=darwin --arch=x64
 npm run resources:fetch -- --platform=win32 --arch=x64
 ```
 
-The command verifies every downloaded file against the pinned size and SHA-256
-in `sources.json`, installs the payload, updates `manifest.json`, and launches
-the analysis engine to confirm that both models load. Verified downloads are
-reused from the project-level `.cache/katago` directory, which is outside the
-packaged `extraResources` tree.
+このコマンドは、取得した各ファイルを`sources.json`に固定したファイルサイズと
+SHA-256で検証し、所定の場所へ配置して`manifest.json`を更新します。最後にKataGoの
+analysis engineを起動し、通常モデルとHuman SLモデルの両方が読み込めることを確認します。
 
-Required targets:
+検証済みのダウンロードはプロジェクト直下の`.cache/katago`で再利用します。このキャッシュは
+アプリへ同梱される`extraResources`には入りません。
 
-- `darwin-arm64`: local Metal-enabled Apple Silicon KataGo. Install it with
-  `brew install katago` or pass `--katago-binary`.
-- `darwin-x64`: local Metal-enabled Intel KataGo. The binary must actually
-  contain x64 code.
-- `win32-x64`: pinned official KataGo 1.17.1 OpenCL archive and its DLLs.
+## 対応対象
 
-Required models:
+- `darwin-arm64`: Apple Silicon用のMetal版KataGo。`brew install katago`で
+  インストールするか、`--katago-binary`で実行ファイルを指定します。
+- `darwin-x64`: Intel用のMetal版KataGo。実行ファイルにx64コードが必要です。
+- `win32-x64`: 固定バージョンのKataGo 1.17.1公式OpenCLアーカイブと必要なDLL。
 
-- A tested normal KataGo model for full-strength analysis.
-- `b18c384nbt-humanv0.bin.gz` for `rank_1d` through `rank_9d` Human SL policy.
+## 必要なモデル
 
-Before distributing a build, update `THIRD_PARTY_NOTICES`, run the real-engine
-smoke test on all three targets, sign the installers, and notarize macOS builds.
+- 通常の高棋力解析に使用する、検証済みのKataGoモデル。
+- `rank_1d`から`rank_9d`までのHuman SL方策に使用する
+  `b18c384nbt-humanv0.bin.gz`。
 
-The macOS fetcher copies non-system Homebrew dylibs, rewrites their Mach-O load
-paths, and ad-hoc signs the copied files so the local smoke test can run. This is
-not a substitute for Developer ID signing and notarization of the final app.
+## macOSでKataGoが見つからない場合
+
+`resources:fetch`はPATH上の`katago`を探します。見つからなければ、次を実行してください。
+
+```sh
+brew install katago
+npm run resources:fetch -- --platform=darwin --arch=arm64
+```
+
+別のMetal版KataGoを使う場合:
+
+```sh
+npm run resources:fetch -- --platform=darwin --arch=arm64 \
+  --katago-binary=/absolute/path/to/katago
+```
+
+macOS用の処理では、Homebrew由来の非システムdylibもコピーし、Mach-Oの参照先を
+書き換えたうえでアドホック署名します。これはローカル動作確認用であり、最終アプリに必要な
+Developer ID署名とApple公証の代わりにはなりません。
+
+配布前に`THIRD_PARTY_NOTICES`を完成させ、3対象すべてで実エンジンの動作確認を行い、
+インストーラーの署名とmacOSアプリの公証を実施してください。

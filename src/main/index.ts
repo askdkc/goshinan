@@ -28,7 +28,7 @@ const createWindow = (): BrowserWindow => {
     minHeight: 620,
     show: false,
     backgroundColor: "#101512",
-    title: "Go Shinan",
+    title: "碁指南",
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
       contextIsolation: true,
