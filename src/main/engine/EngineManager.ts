@@ -40,6 +40,21 @@ const spawnEngineProcess: EngineProcessFactory = (executable, args, cwd) =>
     stdio: ["pipe", "pipe", "pipe"],
   });
 
+const waitForProcessExit = (
+  child: ChildProcessWithoutNullStreams,
+): Promise<void> =>
+  new Promise((resolve) => {
+    if (child.exitCode !== null || child.signalCode !== null) {
+      resolve();
+      return;
+    }
+    const timeout = setTimeout(resolve, 2_000);
+    child.once("close", () => {
+      clearTimeout(timeout);
+      resolve();
+    });
+  });
+
 export class EngineUnavailableError extends Error {
   constructor(message: string) {
     super(message);
@@ -337,7 +352,7 @@ export class EngineManager extends EventEmitter {
     }
   }
 
-  stop(): void {
+  async stop(): Promise<void> {
     this.intentionalStop = true;
     this.generation += 1;
     for (const pending of this.pending.values()) {
@@ -349,7 +364,10 @@ export class EngineManager extends EventEmitter {
     this.process = undefined;
     this.reader?.close();
     this.reader = undefined;
+    const exited =
+      child === undefined ? Promise.resolve() : waitForProcessExit(child);
     if (child !== undefined && !child.killed) child.kill();
     this.setStatus({ state: "stopped" });
+    await exited;
   }
 }

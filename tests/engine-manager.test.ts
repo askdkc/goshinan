@@ -69,8 +69,14 @@ describe.skipIf(platformKey() === "unsupported")(
     let manager: EngineManager | undefined;
 
     afterEach(async () => {
-      manager?.stop();
-      if (root !== undefined) await rm(root, { recursive: true, force: true });
+      await manager?.stop();
+      if (root !== undefined)
+        await rm(root, {
+          recursive: true,
+          force: true,
+          maxRetries: 5,
+          retryDelay: 100,
+        });
       root = undefined;
       manager = undefined;
     });
