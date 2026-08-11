@@ -246,9 +246,14 @@ out/Go Shinan-win32-x64/
 ### Squirrel.Windows インストーラーを作る
 
 ```powershell
-npm i
+npm ci
+npm run resources:fetch -- --platform=win32 --arch=x64
 npm run make -- --platform=win32 --arch=x64
 ```
+
+`make`は対象環境のKataGo実行ファイル、DLL、両モデル、設定ファイルと
+`manifest.json`のSHA-256をビルド前に検証します。`resources:fetch`を省略した場合は、
+解析不能なインストーラーを作らず、その場で不足ファイルを表示して終了します。
 
 成功すると、`out/make/` 以下に主に次が生成されます。
 

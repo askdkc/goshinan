@@ -1,4 +1,5 @@
 import type { ForgeConfig } from "@electron-forge/shared-types";
+import path from "node:path";
 import { MakerSquirrel } from "@electron-forge/maker-squirrel";
 import { MakerZIP } from "@electron-forge/maker-zip";
 import { WebpackPlugin } from "@electron-forge/plugin-webpack";
@@ -6,6 +7,9 @@ import { FusesPlugin } from "@electron-forge/plugin-fuses";
 import { FuseV1Options, FuseVersion } from "@electron/fuses";
 import { mainConfig } from "./webpack.main.config";
 import { rendererConfig } from "./webpack.renderer.config";
+import { resolveAndVerifyResources } from "./src/main/engine/resources";
+
+const kataGoResourceRoot = path.resolve(__dirname, "resources", "katago");
 
 const config: ForgeConfig = {
   packagerConfig: {
@@ -21,6 +25,20 @@ const config: ForgeConfig = {
     },
   },
   rebuildConfig: {},
+  hooks: {
+    prePackage: async (_forgeConfig, platform, arch) => {
+      try {
+        await resolveAndVerifyResources(kataGoResourceRoot, platform, arch);
+      } catch (error) {
+        const detail = error instanceof Error ? error.message : String(error);
+        throw new Error(
+          `${platform}-${arch}用KataGoリソースの検証に失敗しました: ${detail}\n` +
+            `先に npm run resources:fetch -- --platform=${platform} --arch=${arch} を実行してください。`,
+          { cause: error },
+        );
+      }
+    },
+  },
   makers: [new MakerSquirrel({}), new MakerZIP({}, ["darwin"])],
   plugins: [
     new WebpackPlugin({

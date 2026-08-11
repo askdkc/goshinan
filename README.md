@@ -42,6 +42,7 @@ Node.js 26.5.0で`package`と`make`が完了することを確認済みです。
 ```powershell
 winget install --id OpenJS.NodeJS --exact --version 26.5.0
 ```
+
 nodeによるスクリプト実行が弾かれることがあるのでPowerShellを管理者として実行して、次のスクリプトでnodeを許可してください。
 
 ```powershell
@@ -138,8 +139,13 @@ npm run make -- --platform=darwin --arch=x64
 Windows上で実行します。`package.json`には配布者本人または組織の`author`も設定してください。
 
 ```powershell
+npm ci
+npm run resources:fetch -- --platform=win32 --arch=x64
 npm run make -- --platform=win32 --arch=x64
 ```
+
+ビルド前に、対象環境のKataGo実行ファイル、DLL、モデル、設定ファイルとSHA-256を
+検証します。`resources:fetch`を省略すると、不完全な配布物を作らずビルドを停止します。
 
 成果物は`out/make/`以下のSquirrel `Setup.exe`、`.nupkg`、`RELEASES`です。
 

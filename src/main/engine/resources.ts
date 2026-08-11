@@ -30,14 +30,14 @@ export interface ResolvedResources {
   kataGoVersion: string;
 }
 
-const platformKey = (): string => {
-  if (process.platform === "darwin" && process.arch === "arm64")
-    return "darwin-arm64";
-  if (process.platform === "darwin" && process.arch === "x64")
-    return "darwin-x64";
-  if (process.platform === "win32" && process.arch === "x64")
-    return "win32-x64";
-  throw new Error(`Unsupported platform: ${process.platform}-${process.arch}`);
+const platformKey = (
+  platform: string = process.platform,
+  arch: string = process.arch,
+): string => {
+  if (platform === "darwin" && arch === "arm64") return "darwin-arm64";
+  if (platform === "darwin" && arch === "x64") return "darwin-x64";
+  if (platform === "win32" && arch === "x64") return "win32-x64";
+  throw new Error(`Unsupported platform: ${platform}-${arch}`);
 };
 
 const resolveInside = (root: string, relativePath: string): string => {
@@ -81,6 +81,8 @@ const verifyEntry = async (
 
 export const resolveAndVerifyResources = async (
   root: string,
+  platform: string = process.platform,
+  arch: string = process.arch,
 ): Promise<ResolvedResources> => {
   const manifestPath = resolveInside(root, "manifest.json");
   let manifest: ResourceManifest;
@@ -95,19 +97,22 @@ export const resolveAndVerifyResources = async (
     );
   }
 
-  const platform = manifest.platforms[platformKey()];
-  if (platform === undefined)
-    throw new Error(`No KataGo resources are configured for ${platformKey()}`);
+  const targetKey = platformKey(platform, arch);
+  const platformResources = manifest.platforms[targetKey];
+  if (platformResources === undefined)
+    throw new Error(`No KataGo resources are configured for ${targetKey}`);
 
   const [binaryPath, normalModelPath, humanModelPath, configPath] =
     await Promise.all([
-      verifyEntry(root, platform.binary),
-      verifyEntry(root, platform.normalModel),
-      verifyEntry(root, platform.humanModel),
-      verifyEntry(root, platform.config),
+      verifyEntry(root, platformResources.binary),
+      verifyEntry(root, platformResources.normalModel),
+      verifyEntry(root, platformResources.humanModel),
+      verifyEntry(root, platformResources.config),
     ]);
   await Promise.all(
-    (platform.dependencies ?? []).map((entry) => verifyEntry(root, entry)),
+    (platformResources.dependencies ?? []).map((entry) =>
+      verifyEntry(root, entry),
+    ),
   );
 
   return {

@@ -65,4 +65,42 @@ describe.skipIf(targetKey() === undefined)("KataGo resource integrity", () => {
       /Checksum mismatch for dependency/,
     );
   });
+
+  it("verifies an explicit build target instead of the host platform", async () => {
+    root = await mkdtemp(path.join(tmpdir(), "goshinan-resources-"));
+    const files = {
+      binary: "windows-binary",
+      normal: "normal",
+      human: "human",
+      config: "config",
+    };
+    await Promise.all(
+      Object.entries(files).map(([name, value]) =>
+        writeFile(path.join(root!, name), value, "utf8"),
+      ),
+    );
+    await writeFile(
+      path.join(root, "manifest.json"),
+      JSON.stringify({
+        kataGoVersion: "test",
+        humanModelVersion: "test",
+        platforms: {
+          "win32-x64": {
+            binary: { path: "binary", sha256: digest(files.binary) },
+            normalModel: { path: "normal", sha256: digest(files.normal) },
+            humanModel: { path: "human", sha256: digest(files.human) },
+            config: { path: "config", sha256: digest(files.config) },
+          },
+        },
+      }),
+      "utf8",
+    );
+
+    await expect(
+      resolveAndVerifyResources(root, "win32", "x64"),
+    ).resolves.toMatchObject({
+      binaryPath: path.join(root, "binary"),
+      kataGoVersion: "test",
+    });
+  });
 });
