@@ -1,0 +1,60 @@
+{
+  "name": "goshinan",
+  "productName": "Go Shinan",
+  "version": "0.1.0",
+  "description": "Offline KataGo-powered Go coaching desktop application",
+  "main": ".webpack/main",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "verify": "npm run typecheck && npm run lint && npm test && npm run package"
+  },
+  "engines": {
+    "node": ">=22.12"
+  },
+  "overrides": {
+    "tar": "7.5.22",
+    "tmp": "0.2.7",
+    "uuid": "11.1.1",
+    "webpack-dev-server": "5.2.6"
+  },
+  "dependencies": {
+    "@sabaki/go-board": "1.4.3",
+    "@sabaki/sgf": "3.5.0",
+    "electron-squirrel-startup": "1.0.1",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "7.11.2",
+    "@electron-forge/maker-squirrel": "7.11.2",
+    "@electron-forge/maker-zip": "7.11.2",
+    "@electron-forge/plugin-fuses": "7.11.2",
+    "@electron-forge/plugin-webpack": "7.11.2",
+    "@electron/fuses": "1.8.0",
+    "@eslint/js": "10.0.1",
+    "@types/node": "26.2.0",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.4",
+    "css-loader": "7.1.4",
+    "electron": "43.3.0",
+    "eslint": "10.8.1",
+    "prettier": "3.9.6",
+    "style-loader": "4.0.0",
+    "ts-loader": "9.6.2",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.67.0",
+    "vitest": "4.1.10",
+    "webpack": "5.109.2",
+    "webpack-cli": "7.2.2"
+  }
+}

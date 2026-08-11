@@ -1,0 +1,60 @@
+{
+  "kataGoVersion": "REPLACE_WITH_TESTED_VERSION",
+  "humanModelVersion": "b18c384nbt-humanv0",
+  "platforms": {
+    "darwin-arm64": {
+      "binary": {
+        "path": "bin/darwin-arm64/katago",
+        "sha256": "REPLACE_WITH_SHA256"
+      },
+      "normalModel": {
+        "path": "models/normal.bin.gz",
+        "sha256": "REPLACE_WITH_SHA256"
+      },
+      "humanModel": {
+        "path": "models/b18c384nbt-humanv0.bin.gz",
+        "sha256": "REPLACE_WITH_SHA256"
+      },
+      "config": {
+        "path": "config/analysis.cfg",
+        "sha256": "REPLACE_WITH_SHA256"
+      }
+    },
+    "darwin-x64": {
+      "binary": {
+        "path": "bin/darwin-x64/katago",
+        "sha256": "REPLACE_WITH_SHA256"
+      },
+      "normalModel": {
+        "path": "models/normal.bin.gz",
+        "sha256": "REPLACE_WITH_SHA256"
+      },
+      "humanModel": {
+        "path": "models/b18c384nbt-humanv0.bin.gz",
+        "sha256": "REPLACE_WITH_SHA256"
+      },
+      "config": {
+        "path": "config/analysis.cfg",
+        "sha256": "REPLACE_WITH_SHA256"
+      }
+    },
+    "win32-x64": {
+      "binary": {
+        "path": "bin/win32-x64/katago.exe",
+        "sha256": "REPLACE_WITH_SHA256"
+      },
+      "normalModel": {
+        "path": "models/normal.bin.gz",
+        "sha256": "REPLACE_WITH_SHA256"
+      },
+      "humanModel": {
+        "path": "models/b18c384nbt-humanv0.bin.gz",
+        "sha256": "REPLACE_WITH_SHA256"
+      },
+      "config": {
+        "path": "config/analysis.cfg",
+        "sha256": "REPLACE_WITH_SHA256"
+      }
+    }
+  }
+}
