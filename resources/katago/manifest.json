@@ -1,23 +1,361 @@
 {
-  "kataGoVersion": "REPLACE_WITH_TESTED_VERSION",
+  "kataGoVersion": "1.17.2",
   "humanModelVersion": "b18c384nbt-humanv0",
   "platforms": {
     "darwin-arm64": {
       "binary": {
         "path": "bin/darwin-arm64/katago",
-        "sha256": "REPLACE_WITH_SHA256"
+        "sha256": "702f5b5ca05d057cb575298b069a48c6f712bc032bb81783d46c0c107c2a360c"
       },
+      "dependencies": [
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_base.2605.0.0.dylib",
+          "sha256": "49456c581f23386561947b116e89b6ca199d087f92a737dd483454e72cff9981"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_city.2605.0.0.dylib",
+          "sha256": "76eea3aa7b0294af2f7971b1090769b6db92eea4d9b820404683fd4b28e5010d"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_civil_time.2605.0.0.dylib",
+          "sha256": "c3ea677c7dace95f75fe2e3c2e078962d2299d02fd79081e497b83dac9c6e598"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_cord_internal.2605.0.0.dylib",
+          "sha256": "ca67a1fec417fc07ae7e556eedf966ffb6314dfb26628112419fafd38bd2311d"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_cord.2605.0.0.dylib",
+          "sha256": "0c1687cb8a6311645050c18fbf8d18a7b042ac10eb48f8c08fe5a7908b3fc9c4"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_cordz_functions.2605.0.0.dylib",
+          "sha256": "15a72bb5ff272e93fb8bd9f895fedc51bbf0783659b09e390eb4709438d29578"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_cordz_handle.2605.0.0.dylib",
+          "sha256": "23245c9a4ad52db3c08631f9345f773b6781d18fce697fbd589fa0fa99f32c5b"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_cordz_info.2605.0.0.dylib",
+          "sha256": "5aaae6f92084240a466fc66d44c0f78b7c4a019c1edb05ef4c6890204c6e3e38"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_crc_cord_state.2605.0.0.dylib",
+          "sha256": "62d0b505a5b02fa7b72431c39d966a363a70b450189a9775054bf85e4a329270"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_crc_cpu_detect.2605.0.0.dylib",
+          "sha256": "085d7827345c76719fc0dec7b350490df343e97d62e25852e8ca64a6d40d4339"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_crc_internal.2605.0.0.dylib",
+          "sha256": "19346465cbde51a052620074e0359e6b01bae85249a9318c2e06b3526e606a04"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_crc32c.2605.0.0.dylib",
+          "sha256": "5fbfef03390ff9a525e521a1b9a6d1b45fcdb1938508654c307c56ec2bfc782b"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_debugging_internal.2605.0.0.dylib",
+          "sha256": "5cc168aa54ffd63226bf3b28b18d4b715cf65524116bb1f51ae6ec6550a0ac29"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_decode_rust_punycode.2605.0.0.dylib",
+          "sha256": "48f7c4174a3250a4694c034ac9e45ce74d2315ec5d3a42a5e77d41d061619288"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_demangle_internal.2605.0.0.dylib",
+          "sha256": "87527248e8fc69e9957fb0e4a03ce9600d5f3273fd602fdf185fb3d259d8a1b9"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_demangle_rust.2605.0.0.dylib",
+          "sha256": "9d133f9612818afaf9071113ef8b9cf1400bf9cb44466445ed97acf4583555ef"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_die_if_null.2605.0.0.dylib",
+          "sha256": "aacd6601ada850394ee66cbc87513405f81a0214494af5bddcde8d5e5ad02b75"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_examine_stack.2605.0.0.dylib",
+          "sha256": "836b7e373084e83039ca07891c345131c8bd311bc4b195453a852aeadd3edb95"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_exponential_biased.2605.0.0.dylib",
+          "sha256": "61516a2a883de63919c2f6a36e5387aa4fe78fe95a87b1ba9748d2068d89d4a6"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_flags_commandlineflag_internal.2605.0.0.dylib",
+          "sha256": "4fe288be2c8997012524b8d1c167867931cc4ffe29f0229e4db5d35a687ca1c3"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_flags_commandlineflag.2605.0.0.dylib",
+          "sha256": "d00def24aa865220845e40fcd7a0d798e377d211dd870a0dddd566292b9c6aea"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_flags_config.2605.0.0.dylib",
+          "sha256": "a873bcb14ec63ee6e995344fd6d754d82e37723deb7051ca0c454cd2cba11159"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_flags_internal.2605.0.0.dylib",
+          "sha256": "cd52ac7c23752b899fb52c57c2ed1c61de97324cc8129cb57c23bfb1c18caf26"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_flags_marshalling.2605.0.0.dylib",
+          "sha256": "004995333d8203379a5cb58e88be7d8a3675cfad08a76434c4363cec8f23ef17"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_flags_private_handle_accessor.2605.0.0.dylib",
+          "sha256": "f45be73796170b4951087d516d40226991529bd86ff31cee9f94afe0a9bde641"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_flags_program_name.2605.0.0.dylib",
+          "sha256": "6b066350f6631248db0f507e4af57bf46d1542c4786424c7688af382ad262aa4"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_flags_reflection.2605.0.0.dylib",
+          "sha256": "3e487ea38f31c3e02b3a21c602c5333e9bae137fc6125ff93a3672159cde2c9d"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_graphcycles_internal.2605.0.0.dylib",
+          "sha256": "fc7566bae8a8e06c829d8c4e54943927e420227b6eeeb4358648dd1f71edd9bf"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_hash.2605.0.0.dylib",
+          "sha256": "9a9099fc42daf23665edbb06d66c7784d737c625dd11255626576ec0a6ea45ea"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_hashtablez_sampler.2605.0.0.dylib",
+          "sha256": "1ca930cdc2cf1d94684e75ac2424f2b82aeebcac370cab142194de31f9f3516c"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_int128.2605.0.0.dylib",
+          "sha256": "d451e2af22cb14d31a07e8b0e5230cc47b63f313c1bd9d2525c6ae92a85d3e5b"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_kernel_timeout_internal.2605.0.0.dylib",
+          "sha256": "5a895aaa6c15fa29e703ed9f0c36d232c04336cd6189c65ec4a81f29ba250ef7"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_leak_check.2605.0.0.dylib",
+          "sha256": "cb0fd74eba9ccee997107515faadb0679c6913e00da1799d48ecb47f58397d03"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_log_entry.2605.0.0.dylib",
+          "sha256": "7191dce792a7e1c7107434b23f33c2c8f9879b9af3776ebc1a88d22c5f610b38"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_log_globals.2605.0.0.dylib",
+          "sha256": "02cbaf71862610229429052faac1fe55a6af7d88f153406efce84da74345335a"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_log_initialize.2605.0.0.dylib",
+          "sha256": "56203e641c2e3e3757453919c1ed208e089963e9644a84200eaead89101c2f42"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_log_internal_check_op.2605.0.0.dylib",
+          "sha256": "bf4df8fab0c8bbb8c90f498a4541768e711f294e6e0380847e289108c03d81dd"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_log_internal_conditions.2605.0.0.dylib",
+          "sha256": "b097a675730a1df2a7851461dcab07c91796086b2f7d96bbe6ba32decfde27d4"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_log_internal_fnmatch.2605.0.0.dylib",
+          "sha256": "2da2a502ae32ab5e5f620ebb01d374215f08bbbb5dac798c5c511199992f7edd"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_log_internal_format.2605.0.0.dylib",
+          "sha256": "c2b7262443b577b94d17d22ca818b8dc8d9874f739ba1fc70364accb41f09a0a"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_log_internal_globals.2605.0.0.dylib",
+          "sha256": "4b5e561fcb49e26fab95fa29def0e513e5f03c17dcf01ebd03870e89109f7b2b"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_log_internal_log_sink_set.2605.0.0.dylib",
+          "sha256": "da1e0edd87d0196464a368b5947525e819202c4c1217ec14b5f0c2db6b96d8f9"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_log_internal_message.2605.0.0.dylib",
+          "sha256": "90641f3b3a9ddd41512282f75814ade6131021fcc22b1091661a7b80495c6588"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_log_internal_nullguard.2605.0.0.dylib",
+          "sha256": "920e1b70737dce8505878308171cf6364b855f05a02c88b7565c7dc272621413"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_log_internal_proto.2605.0.0.dylib",
+          "sha256": "d0f9c49c190c9682dc1ae39096dc10f87badb0cbc38cc39da01e853c9b81dfe4"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_log_internal_structured_proto.2605.0.0.dylib",
+          "sha256": "dbedc301cef9a97779f65aa70fbb4244626c71c2f1764e7a763ad686b8445287"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_log_severity.2605.0.0.dylib",
+          "sha256": "63622e46baf8d679e4b48f222397274d5ce93229c41c53feb77dce1b12b90275"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_log_sink.2605.0.0.dylib",
+          "sha256": "5ec9867ca4b66db8a6b02ca38d5ca94d91489025f7db006802ea7cb8b9ed45e7"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_malloc_internal.2605.0.0.dylib",
+          "sha256": "fb55a23bc04dff38881ff969da535c1718ef630ffdfd1cee436f13f8cdc87487"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_random_distributions.2605.0.0.dylib",
+          "sha256": "78f17b480535a6b1f9098251c7355a5bd5508a2f945c1784b50af35efb7e15a5"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_random_internal_entropy_pool.2605.0.0.dylib",
+          "sha256": "1238fc7ae1226d1928e756a2ddd191a53a1d46cb5d81805dcb3a71a6718705b4"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_random_internal_platform.2605.0.0.dylib",
+          "sha256": "960d7b94c8794deae0ceb3a8bba57837ae501dec4f5ec1995b87158da12c3f40"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_random_internal_randen_hwaes_impl.2605.0.0.dylib",
+          "sha256": "159f44edc30975589175f0e95ddcc80ea3a9ae9ca450c9595a94076841c73dfc"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_random_internal_randen_hwaes.2605.0.0.dylib",
+          "sha256": "eee0fda989a3d6257ca7e7c79a49c03d243df1fb198ae57ea1b754249ea11d3d"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_random_internal_randen_slow.2605.0.0.dylib",
+          "sha256": "d29a4343f15ebcfb5f66222d696feaa5af78783d6bbf6aef40a5a8e1e564f800"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_random_internal_randen.2605.0.0.dylib",
+          "sha256": "bb9aa3262266fdcb4d69e52fa2c144cf4d057d7ba9c361a38ec8dba521fa31c3"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_random_internal_seed_material.2605.0.0.dylib",
+          "sha256": "d8fdc32b1414782446ff859f541105b449a245372e1d30aeea6289e64e8f9025"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_random_seed_gen_exception.2605.0.0.dylib",
+          "sha256": "d2b1cabc9e21ab60e2531a83240271183ef7831a0ba9ddbf84e126f96fc8a3f4"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_random_seed_sequences.2605.0.0.dylib",
+          "sha256": "859575c05174b62f4889449f5e40941384e3a2caa3b1e5f1a8c2a7fedc21be1c"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_raw_hash_set.2605.0.0.dylib",
+          "sha256": "bc395697fdaa9b73c4321a7783d9bd61d600c5befc4b5de6b0ac11e6a688a1be"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_raw_logging_internal.2605.0.0.dylib",
+          "sha256": "7a9f39715ff0ed450a88c316bd66057d93e7e617d303d52629208082c897f41f"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_source_location.2605.0.0.dylib",
+          "sha256": "a881ab63873ee59b62c52ebd1488f43db9e89be6d1a7edf1b2cb731cbe9dba8c"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_spinlock_wait.2605.0.0.dylib",
+          "sha256": "ce8dc60d8941d44337a9acd992cd891878dc70101cfc803fced208dbc2bcc3b3"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_stacktrace.2605.0.0.dylib",
+          "sha256": "466093ba4347e253c6b39da1d71b067cde85868c17ea6dbb4f9cd06183a7b6d6"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_status.2605.0.0.dylib",
+          "sha256": "2769087dd08886cdb794997eeb53ace91befb04330bb783c377df565b5e117c8"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_statusor.2605.0.0.dylib",
+          "sha256": "5a91c29ad7adbb228a5d366cdf5f3e118242279e1b158df0ec98ec98ccdd0f94"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_str_format_internal.2605.0.0.dylib",
+          "sha256": "f0726c1c66d05c98e309d70aee6c381df2d0fae32799ee972be935602e7c1e97"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_strerror.2605.0.0.dylib",
+          "sha256": "e49635614cf34842a970419b11078e5301732dd8b3a01d9348089b24dfbf0f11"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_strings_internal.2605.0.0.dylib",
+          "sha256": "5a0fa919bc106d0da9ada106ef23b46b65856d24c675a605b7f07bbf906bc0c0"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_strings.2605.0.0.dylib",
+          "sha256": "157871b8ee8d396a0b36cead1e2f15b42201172a1dec660509414f3c2fe243a3"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_symbolize.2605.0.0.dylib",
+          "sha256": "22d238e18d826c7cbfbc879b1008a3abe2e0a1e83ef02d38fa5790ed7718d59a"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_synchronization.2605.0.0.dylib",
+          "sha256": "ebb1fc9ba43509f3644023c2d642f83ced05c77b692ea28858acbad7abb415f8"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_throw_delegate.2605.0.0.dylib",
+          "sha256": "54d63354d4d09edfb8780f9430d84a56737743e6c9941d89c0c3581952646068"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_time_zone.2605.0.0.dylib",
+          "sha256": "25e2388ac3907c638a72a0bdbb32c65e0982d6ab539005d3ff6a84c81a147188"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_time.2605.0.0.dylib",
+          "sha256": "728a1dfe04cae3a4c0f3e86a3f864436d51e2a3a99fe18536c5d90bfb924a0fc"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_tracing_internal.2605.0.0.dylib",
+          "sha256": "ab414fc5801ceb5e837c3a7021c55a98119832eb3c6b693d20be87dbcd9d9ed8"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_utf8_for_code_point.2605.0.0.dylib",
+          "sha256": "cbd4d3b8f5d22c18bb8c1b4644fa25a117b1184cf7f7d3eadd75b4a44907e75b"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libabsl_vlog_config_internal.2605.0.0.dylib",
+          "sha256": "0f057010e8c920c5b790390805b0f5040092da485fc1a02d768f8d02862dfb7c"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/liblzma.5.dylib",
+          "sha256": "5a3d15f302c447a9bfcc345d3a22d24cc37629555dc4de0c059a14aee79890d7"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libprotobuf.35.1.0.dylib",
+          "sha256": "073301b4538aeda8c6ef338c8a82754bc07f654d39347eb7e3000a87e431214a"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libutf8_range.35.1.0.dylib",
+          "sha256": "ec31d0a0e3165591ae13d77ed51a8ff62ce61437b275041f8282009276dfeb10"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libutf8_validity.35.1.0.dylib",
+          "sha256": "12a1ac0f3f8b23a3c756e2cf95f8426edec24a6c43efd191c404c68522183b3f"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libzip.5.5.dylib",
+          "sha256": "4b501a92b041c44e34d7886f998d8b84ee1fff39e1b96a5426f9074dfb0cc9f9"
+        },
+        {
+          "path": "bin/darwin-arm64/lib/libzstd.1.5.7.dylib",
+          "sha256": "fd516d2081d626b3117cf4f00b3b9566d6799adb939f62f35a1df29b098df480"
+        }
+      ],
       "normalModel": {
         "path": "models/normal.bin.gz",
-        "sha256": "REPLACE_WITH_SHA256"
+        "sha256": "ff8940cbb77d6b3a4279a73332541f28fd2c0870a26fdd6a5272d309ce2cea0b"
       },
       "humanModel": {
         "path": "models/b18c384nbt-humanv0.bin.gz",
-        "sha256": "REPLACE_WITH_SHA256"
+        "sha256": "637746e44f0efe00ad1245a50aa9bbf0716efe364c43965ead97bd6835d84ab5"
       },
       "config": {
         "path": "config/analysis.cfg",
-        "sha256": "REPLACE_WITH_SHA256"
+        "sha256": "a64cfd26eb0a5e5f6ac6e661c879f7552df4a256800cbe2ca3c0a5880a1615d9"
       }
     },
     "darwin-x64": {
@@ -25,17 +363,18 @@
         "path": "bin/darwin-x64/katago",
         "sha256": "REPLACE_WITH_SHA256"
       },
+      "dependencies": [],
       "normalModel": {
         "path": "models/normal.bin.gz",
-        "sha256": "REPLACE_WITH_SHA256"
+        "sha256": "ff8940cbb77d6b3a4279a73332541f28fd2c0870a26fdd6a5272d309ce2cea0b"
       },
       "humanModel": {
         "path": "models/b18c384nbt-humanv0.bin.gz",
-        "sha256": "REPLACE_WITH_SHA256"
+        "sha256": "637746e44f0efe00ad1245a50aa9bbf0716efe364c43965ead97bd6835d84ab5"
       },
       "config": {
         "path": "config/analysis.cfg",
-        "sha256": "REPLACE_WITH_SHA256"
+        "sha256": "a64cfd26eb0a5e5f6ac6e661c879f7552df4a256800cbe2ca3c0a5880a1615d9"
       }
     },
     "win32-x64": {
@@ -43,17 +382,18 @@
         "path": "bin/win32-x64/katago.exe",
         "sha256": "REPLACE_WITH_SHA256"
       },
+      "dependencies": [],
       "normalModel": {
         "path": "models/normal.bin.gz",
-        "sha256": "REPLACE_WITH_SHA256"
+        "sha256": "ff8940cbb77d6b3a4279a73332541f28fd2c0870a26fdd6a5272d309ce2cea0b"
       },
       "humanModel": {
         "path": "models/b18c384nbt-humanv0.bin.gz",
-        "sha256": "REPLACE_WITH_SHA256"
+        "sha256": "637746e44f0efe00ad1245a50aa9bbf0716efe364c43965ead97bd6835d84ab5"
       },
       "config": {
         "path": "config/analysis.cfg",
-        "sha256": "REPLACE_WITH_SHA256"
+        "sha256": "a64cfd26eb0a5e5f6ac6e661c879f7552df4a256800cbe2ca3c0a5880a1615d9"
       }
     }
   }

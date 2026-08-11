@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "normalModel": {
+    "fileName": "normal.bin.gz",
+    "sourceName": "kata1-b18c384nbt-s9732312320-d4245566942.bin.gz",
+    "url": "https://media.katagotraining.org/uploaded/networks/models/kata1/kata1-b18c384nbt-s9732312320-d4245566942.bin.gz",
+    "bytes": 97895768,
+    "sha256": "ff8940cbb77d6b3a4279a73332541f28fd2c0870a26fdd6a5272d309ce2cea0b"
+  },
+  "humanModel": {
+    "fileName": "b18c384nbt-humanv0.bin.gz",
+    "sourceName": "b18c384nbt-humanv0.bin.gz",
+    "url": "https://github.com/lightvector/KataGo/releases/download/v1.15.0/b18c384nbt-humanv0.bin.gz",
+    "bytes": 99066230,
+    "sha256": "637746e44f0efe00ad1245a50aa9bbf0716efe364c43965ead97bd6835d84ab5"
+  },
+  "platforms": {
+    "darwin-arm64": {
+      "kind": "homebrew",
+      "minimumVersion": "1.15.0"
+    },
+    "darwin-x64": {
+      "kind": "homebrew",
+      "minimumVersion": "1.15.0"
+    },
+    "win32-x64": {
+      "kind": "archive",
+      "version": "1.17.1",
+      "fileName": "katago-v1.17.1-opencl-windows-x64.zip",
+      "url": "https://github.com/lightvector/KataGo/releases/download/v1.17.1/katago-v1.17.1-opencl-windows-x64.zip",
+      "bytes": 5347873,
+      "sha256": "68d0a9b11ef7e3c1ddfc5bcd400306ca66c3770dd67a22cb377d3aaaf32e8c66"
+    }
+  }
+}

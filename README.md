@@ -35,9 +35,9 @@ acceptable retry.
   PATH=/opt/homebrew/opt/node@22/bin:$PATH npm install
   ```
 
-- A platform-specific KataGo binary, normal model, and Human SL model. These
-  large native assets are not committed. See `resources/katago/README.md` and
-  replace all checksum placeholders in `resources/katago/manifest.json`.
+- A Homebrew or custom Metal KataGo build on macOS. Windows downloads the
+  official OpenCL build. Models and native payloads are generated locally and
+  are not committed.
 
 Without those assets the application starts in a deliberate `Assets missing`
 state. Local legality, SGF, and manual alternating play remain available, but
@@ -45,11 +45,25 @@ opponent analysis and coaching do not pretend to work.
 
 ### Automatic resource downloads
 
-KataGo binaries and models are not downloaded by `npm install`, `npm start`, or
-the first application launch. A future implementation should provide an
-explicit build command such as `npm run resources:fetch`, pin every source URL,
-verify both archive and extracted-file SHA-256 hashes, and preserve the required
-licenses. That command does not exist yet.
+Run the implemented explicit fetch command before starting or packaging:
+
+```sh
+# macOS Apple Silicon (run `brew install katago` first)
+npm run resources:fetch -- --platform=darwin --arch=arm64
+
+# Windows x64
+npm run resources:fetch -- --platform=win32 --arch=x64
+```
+
+It downloads the pinned normal and Human SL models, verifies sizes and SHA-256
+hashes, prepares the platform binary and native libraries, updates the runtime
+manifest, and starts KataGo to verify that both models load. macOS uses a local
+Metal KataGo because upstream does not publish precompiled macOS executables;
+pass `--katago-binary=/absolute/path/to/katago` to select one explicitly.
+
+The command is deliberately not a side effect of `npm install`, `npm start`, or
+first launch. See `resources/katago/README.md` for platform details and failure
+modes.
 
 Downloaded binaries, models, archives, caches, and partial files are excluded
 by `.gitignore`. Only the resource manifest, configuration, checksums, and
@@ -58,6 +72,7 @@ license records belong in Git.
 ## Development
 
 ```sh
+PATH=/opt/homebrew/opt/node@22/bin:$PATH npm run resources:fetch -- --platform=darwin --arch=arm64
 PATH=/opt/homebrew/opt/node@22/bin:$PATH npm run typecheck
 PATH=/opt/homebrew/opt/node@22/bin:$PATH npm test
 PATH=/opt/homebrew/opt/node@22/bin:$PATH npm run lint
@@ -72,6 +87,6 @@ notarization credentials must remain outside this repository.
 ## Release blockers
 
 This source implementation is not a distributable product until release
-engineering supplies and verifies the native assets, completes the exact
-third-party license bundle, calibrates ranks and coaching thresholds, runs
-real-engine smoke tests on every target, and configures signing/notarization.
+engineering completes the exact third-party license bundle, calibrates ranks
+and coaching thresholds, runs the resource fetch and packaging tests on every
+target, and configures signing/notarization.

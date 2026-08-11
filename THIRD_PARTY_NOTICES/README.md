@@ -12,6 +12,19 @@ it is not a substitute for the release-time license audit.
 - Electron: <https://github.com/electron/electron>
 - React: <https://github.com/facebook/react>
 
-The Human SL model and selected normal model must be accompanied by their
-download source, immutable checksum, license, and redistribution terms before
-they are added to a release artifact.
+Pinned network payloads:
+
+- Normal model:
+  `kata1-b18c384nbt-s9732312320-d4245566942.bin.gz`, SHA-256
+  `ff8940cbb77d6b3a4279a73332541f28fd2c0870a26fdd6a5272d309ce2cea0b`,
+  from <https://katagotraining.org/networks/>.
+- Human SL model: `b18c384nbt-humanv0.bin.gz`, SHA-256
+  `637746e44f0efe00ad1245a50aa9bbf0716efe364c43965ead97bd6835d84ab5`,
+  from <https://github.com/lightvector/KataGo/releases/tag/v1.15.0>.
+
+The Windows payload is the official KataGo 1.17.1 OpenCL x64 archive, SHA-256
+`68d0a9b11ef7e3c1ddfc5bcd400306ca66c3770dd67a22cb377d3aaaf32e8c66`.
+The macOS payload includes the selected local KataGo binary and its non-system
+dynamic-library dependencies. A release must add the exact license texts for
+those resolved dependencies; this file records sources but is not yet a
+complete binary-distribution notice bundle.

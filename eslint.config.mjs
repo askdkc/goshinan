@@ -27,4 +27,19 @@ export default tseslint.config(
       "@typescript-eslint/no-misused-promises": "error",
     },
   },
+  {
+    ...tseslint.configs.disableTypeChecked,
+    files: ["scripts/**/*.mjs"],
+    languageOptions: {
+      ...tseslint.configs.disableTypeChecked.languageOptions,
+      globals: {
+        AbortSignal: "readonly",
+        clearTimeout: "readonly",
+        console: "readonly",
+        fetch: "readonly",
+        process: "readonly",
+        setTimeout: "readonly",
+      },
+    },
+  },
 );

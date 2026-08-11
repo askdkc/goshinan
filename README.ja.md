@@ -30,10 +30,8 @@ Electron Forge は、原則として実行中の OS と CPU 向けにビルド�
 - Git
 - Node.js 22.12 以上
 - npm 10 以上を推奨
-- KataGo バイナリ
-- 通常解析用 KataGo モデル
-- Human SL モデル `b18c384nbt-humanv0.bin.gz`
-- Electron、Forge の補助ファイルを取得するためのビルド時ネットワーク接続
+- macOS の場合は Homebrew 版 KataGo、または自分でビルドした Metal 版 KataGo
+- KataGo モデル、Electron、Forge の補助ファイルを取得するためのビルド時ネットワーク接続
 
 バージョンを確認します。
 
@@ -59,30 +57,69 @@ npm ci
 
 ### 自動ダウンロードについて
 
-現在は KataGo バイナリとモデルを自動ダウンロードしません。`npm ci`、
-`npm install`、`npm start`、アプリの初回起動のいずれもリソースを取得しません。
-リソースがない場合、アプリは `Assets missing` 状態で起動します。
-
-将来、自動化する場合は `postinstall` や初回起動時に暗黙で取得するのではなく、
-次のような明示的なビルド用コマンドを追加する方針です。ただし、このコマンドは
-現時点では未実装です。
+`resources:fetch` を実装済みです。対象プラットフォームを明示して実行します。
 
 ```sh
 npm run resources:fetch -- --platform=darwin --arch=arm64
+npm run resources:fetch -- --platform=darwin --arch=x64
 npm run resources:fetch -- --platform=win32 --arch=x64
 ```
 
-取得処理には、固定 URL、アーカイブと展開後ファイルの SHA-256 検証、キャッシュ、
-実行権限の設定、ライセンス文書の保存が必要です。macOS 用 KataGo は公式リリースに
-プリコンパイル済みバイナリがない場合があるため、CI でビルドした固定 artifact を
-管理する必要があります。
+このコマンドは次を行います。
+
+- 通常解析モデルと Human SL モデルを固定URLから取得し、ファイルサイズと
+  SHA-256を照合する
+- Windows x64では、KataGo 1.17.1公式OpenCL ZIPを取得・検証し、実行ファイルと
+  必須DLLを展開する
+- macOSでは、ローカルのMetal版KataGoと非システムdylibを同梱用ディレクトリへ
+  コピーし、Mach-Oの参照先を書き換える
+- 実行ファイル、モデル、設定、依存ライブラリのSHA-256を`manifest.json`へ書き込む
+- 完成したanalysis engineを実際に起動し、通常モデルとHuman SLモデルの両方が
+  読み込めることを確認する
+
+モデルは合計約200 MBです。検証済みファイルを`.cache/katago/`へ保存する
+ため、2回目以降は再ダウンロードしません。キャッシュと配置済みモデルを合わせて
+約400 MBのディスク容量を使います。
+
+`npm ci`、`npm install`、`npm start`、アプリの初回起動からは暗黙に実行しません。
+大容量ダウンロードとネイティブファイルの変更を依存関係インストールの副作用に
+しないためです。リソースがない場合、アプリは`Assets missing`状態で起動します。
+
+### macOSでのKataGo準備
+
+KataGo公式GitHub ReleaseにはmacOS用プリコンパイル済み実行ファイルがないため、
+`resources:fetch`はPATH上のローカルKataGoを使用します。通常は先に実行します。
+
+```sh
+brew install katago
+npm run resources:fetch -- --platform=darwin --arch=arm64
+```
+
+別のMetal版バイナリを使う場合:
+
+```sh
+npm run resources:fetch -- --platform=darwin --arch=arm64 \
+  --katago-binary=/absolute/path/to/katago
+```
+
+指定したCPUアーキテクチャがバイナリに含まれない場合、KataGo 1.15.0未満の場合、
+またはdylibを安全に解決できない場合は処理を中止します。Apple Silicon上でIntel
+x64リソースを作る場合は、x64版KataGoを`--katago-binary`で指定してください。
+
+### WindowsでのKataGo準備
+
+Windows x64では追加のKataGoインストールは不要です。次のコマンドが公式OpenCL版
+KataGo、必須DLL、両モデルを取得します。
+
+```powershell
+npm run resources:fetch -- --platform=win32 --arch=x64
+```
 
 ダウンロードしたバイナリ、モデル、アーカイブ、キャッシュ、一時ファイルは
 `.gitignore` の対象です。`manifest.json`、設定ファイル、チェックサム、ライセンス
 情報だけを Git で管理します。
 
-`resources/katago/manifest.json` に記載された場所へ、対象 OS・CPU 用のファイルを
-配置します。モデルはプラットフォーム間で共用できます。
+出力先は次のとおりです。モデルはプラットフォーム間で共用します。
 
 ```text
 resources/katago/
@@ -94,37 +131,13 @@ resources/katago/
 ├── models/
 │   ├── normal.bin.gz
 │   └── b18c384nbt-humanv0.bin.gz
-└── manifest.json
+├── manifest.json
+└── sources.json
 ```
 
-macOS では、KataGo バイナリに実行権限を付けます。
-
-```sh
-chmod +x resources/katago/bin/darwin-arm64/katago
-chmod +x resources/katago/bin/darwin-x64/katago
-```
-
-全ファイルの SHA-256 を計算し、`manifest.json` の
-`REPLACE_WITH_SHA256` を実値へ置き換えてください。macOS の例:
-
-```sh
-shasum -a 256 resources/katago/bin/darwin-arm64/katago
-shasum -a 256 resources/katago/models/normal.bin.gz
-shasum -a 256 resources/katago/models/b18c384nbt-humanv0.bin.gz
-shasum -a 256 resources/katago/config/analysis.cfg
-```
-
-Windows PowerShell の例:
-
-```powershell
-Get-FileHash -Algorithm SHA256 resources\katago\bin\win32-x64\katago.exe
-Get-FileHash -Algorithm SHA256 resources\katago\models\normal.bin.gz
-Get-FileHash -Algorithm SHA256 resources\katago\models\b18c384nbt-humanv0.bin.gz
-Get-FileHash -Algorithm SHA256 resources\katago\config\analysis.cfg
-```
-
-`manifest.json` の `kataGoVersion` も、実際に検証した KataGo のバージョンへ
-変更します。チェックサムが未設定または不一致の場合、アプリは意図的に KataGo を
+URL、期待サイズ、取得元SHA-256は`resources/katago/sources.json`に固定しています。
+値を変更する場合は、配布元とライセンスを再確認し、実ファイルを別経路でも検証して
+ください。チェックサムが未設定または不一致の場合、アプリは意図的にKataGoを
 起動しません。
 
 配布前に、KataGo と各モデルのライセンス・取得元・正確なバージョンを
@@ -176,6 +189,7 @@ PowerShell またはコマンドプロンプトで実行します。
 
 ```powershell
 npm ci
+npm run resources:fetch -- --platform=win32 --arch=x64
 npm run package -- --platform=win32 --arch=x64
 ```
 
@@ -230,6 +244,8 @@ xcode-select -p
 
 ```sh
 npm ci
+brew install katago
+npm run resources:fetch -- --platform=darwin --arch=arm64
 npm run package -- --platform=darwin --arch=arm64
 npm run make -- --platform=darwin --arch=arm64
 ```
@@ -238,6 +254,8 @@ npm run make -- --platform=darwin --arch=arm64
 
 ```sh
 npm ci
+brew install katago
+npm run resources:fetch -- --platform=darwin --arch=x64
 npm run package -- --platform=darwin --arch=x64
 npm run make -- --platform=darwin --arch=x64
 ```
@@ -270,16 +288,23 @@ app-specific password、API private key をソースへ直書きしないでく�
 | macOS arm64 | `darwin-arm64` | `.app`、ZIP、署名・公証 |
 | macOS x64   | `darwin-x64`   | `.app`、ZIP、署名・公証 |
 
-各ジョブで、対象プラットフォームの KataGo バイナリを安全な artifact storage から
-取得し、既知の SHA-256 と照合してから `npm run make` を実行してください。署名鍵や
-公証資格情報は CI の secret store に置きます。
+各ジョブで`resources:fetch`を実行してから`npm run make`を実行します。macOSの
+再現可能なリリースではHomebrewの最新版へ無条件に追従せず、検証したKataGo
+バージョンのCI artifactまたは`--katago-binary`を使って入力を固定してください。
+署名鍵や公証資格情報はCIのsecret storeに置きます。
 
 ## よくある失敗
 
 ### `Assets missing`
 
 KataGo またはモデルが未配置、`manifest.json` が未更新、対象 platform key がない、
-あるいは SHA-256 が不一致です。UI が起動しただけでは KataGo の検証成功を意味しません。
+あるいは SHA-256 が不一致です。対象OS上で`resources:fetch`を再実行してください。
+
+### `KataGo was not found`（macOS）
+
+`brew install katago`を実行するか、検証済みMetal版KataGoの絶対パスを
+`--katago-binary`で指定してください。Intel x64用を作る場合はx64コードを含む
+バイナリが必要です。
 
 ### `Checksum mismatch`
 

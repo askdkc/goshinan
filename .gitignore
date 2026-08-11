@@ -7,8 +7,9 @@ dist/
 .DS_Store
 resources/katago/bin/*
 resources/katago/models/*
-resources/katago/.cache/
 resources/katago/downloads/
+resources/katago/analysis-logs/
+.cache/katago/
 resources/katago/**/*.zip
 resources/katago/**/*.tar
 resources/katago/**/*.tar.gz

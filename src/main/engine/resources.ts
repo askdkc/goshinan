@@ -13,6 +13,7 @@ interface PlatformResources {
   normalModel: ResourceEntry;
   humanModel: ResourceEntry;
   config: ResourceEntry;
+  dependencies?: ResourceEntry[];
 }
 
 interface ResourceManifest {
@@ -105,6 +106,9 @@ export const resolveAndVerifyResources = async (
       verifyEntry(root, platform.humanModel),
       verifyEntry(root, platform.config),
     ]);
+  await Promise.all(
+    (platform.dependencies ?? []).map((entry) => verifyEntry(root, entry)),
+  );
 
   return {
     binaryPath,
