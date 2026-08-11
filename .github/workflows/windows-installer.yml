@@ -46,12 +46,17 @@ jobs:
             throw "Tag ${{ github.ref_name }} does not match package version $packageVersion"
           }
 
-      - name: Verify application code
-        run: |
-          npm run typecheck
-          npm run lint
-          npm test
-          npm run format:check
+      - name: Type-check application code
+        run: npm run typecheck
+
+      - name: Lint application code
+        run: npm run lint
+
+      - name: Run application tests
+        run: npm test
+
+      - name: Check application formatting
+        run: npm run format:check
 
       - name: Cache verified KataGo downloads
         uses: actions/cache@v6

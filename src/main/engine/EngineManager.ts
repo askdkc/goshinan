@@ -27,6 +27,19 @@ interface EngineMessage {
   [key: string]: unknown;
 }
 
+type EngineProcessFactory = (
+  executable: string,
+  args: string[],
+  cwd: string,
+) => ChildProcessWithoutNullStreams;
+
+const spawnEngineProcess: EngineProcessFactory = (executable, args, cwd) =>
+  spawn(executable, args, {
+    cwd,
+    shell: false,
+    stdio: ["pipe", "pipe", "pipe"],
+  });
+
 export class EngineUnavailableError extends Error {
   constructor(message: string) {
     super(message);
@@ -44,7 +57,10 @@ export class EngineManager extends EventEmitter {
   private restartAttempts = 0;
   private currentStatus: EngineStatus = { state: "stopped" };
 
-  constructor(private readonly resourceRoot: string) {
+  constructor(
+    private readonly resourceRoot: string,
+    private readonly createProcess: EngineProcessFactory = spawnEngineProcess,
+  ) {
     super();
   }
 
@@ -79,7 +95,7 @@ export class EngineManager extends EventEmitter {
       return;
     }
 
-    const child = spawn(
+    const child = this.createProcess(
       resources.binaryPath,
       [
         "analysis",
@@ -90,7 +106,7 @@ export class EngineManager extends EventEmitter {
         "-human-model",
         resources.humanModelPath,
       ],
-      { cwd: this.resourceRoot, shell: false, stdio: ["pipe", "pipe", "pipe"] },
+      this.resourceRoot,
     );
     this.process = child;
     this.reader = createInterface({ input: child.stdout });

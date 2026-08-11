@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import { spawn } from "node:child_process";
 import { chmod, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
@@ -76,7 +77,7 @@ describe.skipIf(platformKey() === "unsupported")(
 
     const setup = async (): Promise<EngineManager> => {
       root = await mkdtemp(path.join(tmpdir(), "goshinan-engine-"));
-      const binaryName = process.platform === "win32" ? "katago.exe" : "katago";
+      const binaryName = "fake-katago.cjs";
       const binaryPath = path.join(root, binaryName);
       const normal = "normal-model";
       const human = "human-model";
@@ -103,7 +104,13 @@ describe.skipIf(platformKey() === "unsupported")(
         }),
         "utf8",
       );
-      manager = new EngineManager(root);
+      manager = new EngineManager(root, (scriptPath, args, cwd) =>
+        spawn(process.execPath, [scriptPath, ...args], {
+          cwd,
+          shell: false,
+          stdio: ["pipe", "pipe", "pipe"],
+        }),
+      );
       await manager.start();
       return manager;
     };

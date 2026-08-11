@@ -46,13 +46,21 @@ jobs:
         if: steps.katago.outputs.release_needed == 'true'
         run: npm ci
 
-      - name: Verify application code
+      - name: Type-check application code
         if: steps.katago.outputs.release_needed == 'true'
-        run: |
-          npm run typecheck
-          npm run lint
-          npm test
-          npm run format:check
+        run: npm run typecheck
+
+      - name: Lint application code
+        if: steps.katago.outputs.release_needed == 'true'
+        run: npm run lint
+
+      - name: Run application tests
+        if: steps.katago.outputs.release_needed == 'true'
+        run: npm test
+
+      - name: Check application formatting
+        if: steps.katago.outputs.release_needed == 'true'
+        run: npm run format:check
 
       - name: Cache verified KataGo downloads
         if: steps.katago.outputs.release_needed == 'true'
