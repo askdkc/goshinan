@@ -75,7 +75,7 @@ npm run resources:fetch -- --platform=win32 --arch=x64
 
 - 通常解析モデルと Human SL モデルを固定URLから取得し、ファイルサイズと
   SHA-256を照合する
-- Windows x64では、KataGo 1.17.1公式OpenCL ZIPを取得・検証し、実行ファイルと
+- Windows x64では、固定した公式Eigen AVX2 ZIPを取得・検証し、実行ファイルと
   必須DLLを展開する
 - macOSでは、ローカルのMetal版KataGoと非システムdylibを同梱用ディレクトリへ
   コピーし、Mach-Oの参照先を書き換える
@@ -114,8 +114,9 @@ x64リソースを作る場合は、x64版KataGoを`--katago-binary`で指定し
 
 ### WindowsでのKataGo準備
 
-Windows x64では追加のKataGoインストールは不要です。次のコマンドが公式OpenCL版
-KataGo、必須DLL、両モデルを取得します。
+Windows x64では追加のKataGoインストールやGPUドライバは不要です。次のコマンドが
+固定した公式Eigen AVX2 CPU版KataGo、必須DLL、両モデルを取得します。AVX2対応CPUが
+必要です。
 
 ```powershell
 npm run resources:fetch -- --platform=win32 --arch=x64
@@ -262,6 +263,32 @@ npm run make -- --platform=win32 --arch=x64
 - `RELEASES`
 
 `electron-squirrel-startup` の処理はすでに main process の先頭へ組み込み済みです。
+
+### GitHub ActionsでWindowsインストーラーを作る
+
+`.github/workflows/windows-installer.yml`は、GitHubのActions画面から手動実行するか、
+`v`で始まるタグをpushすると起動します。Windows runner上でKataGo、必須DLL、両モデルを
+取得・検証してからSquirrelインストーラーへ同梱するため、利用者によるKataGoの別途
+インストールは不要です。
+
+完了後はActionsの実行結果にある`go-shinan-windows-x64-<run number>` Artifactから、
+`Go Shinan Setup.exe`と`SHA256SUMS.txt`をダウンロードできます。Artifactの保存期間は
+14日です。
+
+`.github/workflows/katago-weekly-release.yml`は毎週土曜日09:17（Asia/Tokyo）に、
+Windows Eigen AVX2版を含む最新のKataGo安定版を確認します。更新がある場合だけ
+`package.json`のpatch version、取得元、チェックサム、第三者通知を更新し、実際に
+KataGoを起動してからインストーラーを作成します。成功後に変更をdefault branchへ
+commitし、アプリのversion tagとDraft Releaseを作成します。
+
+初回または失敗後の再実行には、Actions画面の`Weekly KataGo update`から手動実行を
+使用できます。Draft Releaseは署名・ライセンス通知・実機動作を確認してからGitHub上で
+Publishしてください。branch protectionでGitHub Actionsからのpushを禁止している場合は、
+このworkflow用の例外またはGitHub Appによる更新方式が必要です。
+リポジトリの`Settings > Actions > General > Workflow permissions`でも、workflowから
+commit、tag、Draft Releaseを作成できる書き込み権限を許可してください。公開リポジトリが
+60日間非アクティブだとscheduled workflowが自動的に無効化されるため、その場合はActions
+画面から再度有効化します。
 
 ### Windows 署名
 

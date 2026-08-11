@@ -9,6 +9,7 @@ export default tseslint.config(
       "node_modules/**",
       "coverage/**",
       "eslint.config.mjs",
+      "scripts/**/*.d.mts",
     ],
   },
   eslint.configs.recommended,

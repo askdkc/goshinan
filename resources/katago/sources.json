@@ -26,10 +26,10 @@
     "win32-x64": {
       "kind": "archive",
       "version": "1.17.1",
-      "fileName": "katago-v1.17.1-opencl-windows-x64.zip",
-      "url": "https://github.com/lightvector/KataGo/releases/download/v1.17.1/katago-v1.17.1-opencl-windows-x64.zip",
-      "bytes": 5347873,
-      "sha256": "68d0a9b11ef7e3c1ddfc5bcd400306ca66c3770dd67a22cb377d3aaaf32e8c66"
+      "fileName": "katago-v1.17.1-eigenavx2-windows-x64.zip",
+      "url": "https://github.com/lightvector/KataGo/releases/download/v1.17.1/katago-v1.17.1-eigenavx2-windows-x64.zip",
+      "bytes": 5245487,
+      "sha256": "f13f1126575a22dc728e931011b1b2e404ce2d02b566876a44a01aea3d27e293"
     }
   }
 }

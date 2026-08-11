@@ -163,7 +163,7 @@ body {
 }
 .board-frame {
   position: relative;
-  width: min(100%, calc(100vh - 155px));
+  width: min(100%, calc(100vh - 215px), 660px);
   margin: 0 auto;
   padding: 8px;
   border: 1px solid #344138;
@@ -458,9 +458,6 @@ input[type="checkbox"] {
   }
   .header-status > span:not(.status-dot) {
     display: none;
-  }
-  .board-frame {
-    width: 100%;
   }
 }
 

@@ -93,7 +93,8 @@ npm i
 npm run resources:fetch -- --platform=win32 --arch=x64
 ```
 
-Windowsでは公式OpenCL版KataGoと必要なDLLも自動取得します。
+Windowsでは公式Eigen AVX2 CPU版KataGoと必要なDLLも自動取得します。GPUドライバは
+不要ですが、AVX2対応CPUが必要です。
 
 取得物、モデル、キャッシュ、一時ファイルは`.gitignore`の対象です。通常解析モデルと
 Human SLモデルの合計は約200 MBで、キャッシュを含めると約400 MBを使用します。
@@ -148,6 +149,18 @@ npm run make -- --platform=win32 --arch=x64
 検証します。`resources:fetch`を省略すると、不完全な配布物を作らずビルドを停止します。
 
 成果物は`out/make/`以下のSquirrel `Setup.exe`、`.nupkg`、`RELEASES`です。
+
+GitHub Actionsでは`Windows installer` workflowを手動実行するか、`v`で始まるタグを
+pushします。KataGoと両モデルを同梱した`Setup.exe`および`SHA256SUMS.txt`が、14日間
+保存されるworkflow Artifactとして出力されます。利用者によるKataGoの別途導入は不要です。
+
+`Weekly KataGo update` workflowは毎週土曜日09:17（Asia/Tokyo）に、Windows Eigen
+AVX2版を含む最新のKataGo安定版を確認します。更新時だけアプリのpatch versionと
+固定チェックサムを更新し、実エンジン検証とビルドの成功後にcommit、tag、Draft Releaseを
+作成します。未署名インストーラーと未完了の第三者通知を誤って一般公開しないよう、公開は
+GitHub上で手動承認します。
+リポジトリ設定でActionsの書き込み権限が必要です。branch protectionでbotの直接pushを
+禁止している場合は例外またはGitHub App方式へ変更してください。
 
 通常、キャッシュ済みのmacOSビルドは数十秒程度です。ネットワークや初回ダウンロードで
 数分かかることはありますが、`Copying files`のまま5分以上進まないのは正常ではありません。

@@ -1,0 +1,103 @@
+name: Windows installer
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: windows-installer-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build Windows x64 installer
+    runs-on: windows-2025
+    timeout-minutes: 45
+
+    defaults:
+      run:
+        shell: pwsh
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 26.5.0
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify tag matches package version
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          $packageVersion = (Get-Content -LiteralPath package.json -Raw | ConvertFrom-Json).version
+          if ("v$packageVersion" -ne "${{ github.ref_name }}") {
+            throw "Tag ${{ github.ref_name }} does not match package version $packageVersion"
+          }
+
+      - name: Verify application code
+        run: |
+          npm run typecheck
+          npm run lint
+          npm test
+          npm run format:check
+
+      - name: Cache verified KataGo downloads
+        uses: actions/cache@v6
+        with:
+          path: .cache/katago
+          key: windows-katago-${{ hashFiles('resources/katago/sources.json') }}
+
+      - name: Download and verify KataGo resources
+        run: npm run resources:fetch -- --platform=win32 --arch=x64
+
+      - name: Build Squirrel installer
+        run: npm run make -- --platform=win32 --arch=x64
+
+      - name: Verify packaged KataGo files
+        run: |
+          $resourceRoot = "out/Go Shinan-win32-x64/resources/katago"
+          $required = @(
+            "$resourceRoot/bin/win32-x64/katago.exe",
+            "$resourceRoot/models/normal.bin.gz",
+            "$resourceRoot/models/b18c384nbt-humanv0.bin.gz",
+            "$resourceRoot/config/analysis.cfg",
+            "$resourceRoot/manifest.json"
+          )
+          foreach ($file in $required) {
+            if (-not (Test-Path -LiteralPath $file -PathType Leaf)) {
+              throw "Packaged KataGo resource is missing: $file"
+            }
+          }
+
+      - name: Create installer checksum
+        run: |
+          $makerRoot = "out/make/squirrel.windows/x64"
+          $installer = Get-ChildItem -LiteralPath $makerRoot -Filter "*Setup.exe" -File
+          if ($installer.Count -ne 1) {
+            throw "Expected exactly one Setup.exe, found $($installer.Count)"
+          }
+          $hash = (Get-FileHash -LiteralPath $installer.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+          "$hash  $($installer.Name)" | Set-Content -LiteralPath "$makerRoot/SHA256SUMS.txt" -Encoding ascii
+
+      - name: Upload Windows installer
+        uses: actions/upload-artifact@v7
+        with:
+          name: go-shinan-windows-x64-${{ github.run_number }}
+          path: |
+            out/make/squirrel.windows/x64/*Setup.exe
+            out/make/squirrel.windows/x64/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 0

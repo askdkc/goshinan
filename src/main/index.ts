@@ -7,6 +7,8 @@ import { registerIpcHandlers } from "./ipc";
 import { PersistenceStore } from "./persistence";
 
 if (squirrelStartup) app.quit();
+if (process.platform === "win32")
+  app.setAppUserModelId("com.squirrel.GoShinan.GoShinan");
 
 let mainWindow: BrowserWindow | null = null;
 let engine: EngineManager | undefined;

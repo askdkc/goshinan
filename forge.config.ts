@@ -39,7 +39,10 @@ const config: ForgeConfig = {
       }
     },
   },
-  makers: [new MakerSquirrel({}), new MakerZIP({}, ["darwin"])],
+  makers: [
+    new MakerSquirrel({ name: "GoShinan" }),
+    new MakerZIP({}, ["darwin"]),
+  ],
   plugins: [
     new WebpackPlugin({
       mainConfig,

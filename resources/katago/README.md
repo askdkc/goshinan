@@ -24,7 +24,8 @@ analysis engineを起動し、通常モデルとHuman SLモデルの両方が読
 - `darwin-arm64`: Apple Silicon用のMetal版KataGo。`brew install katago`で
   インストールするか、`--katago-binary`で実行ファイルを指定します。
 - `darwin-x64`: Intel用のMetal版KataGo。実行ファイルにx64コードが必要です。
-- `win32-x64`: 固定バージョンのKataGo 1.17.1公式OpenCLアーカイブと必要なDLL。
+- `win32-x64`: SHA-256を固定したKataGo公式Eigen AVX2 CPUアーカイブ。
+  GPUドライバは不要ですが、AVX2対応CPUが必要です。
 
 ## 必要なモデル
 

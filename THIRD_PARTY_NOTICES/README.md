@@ -22,8 +22,9 @@ Pinned network payloads:
   `637746e44f0efe00ad1245a50aa9bbf0716efe364c43965ead97bd6835d84ab5`,
   from <https://github.com/lightvector/KataGo/releases/tag/v1.15.0>.
 
-The Windows payload is the official KataGo 1.17.1 OpenCL x64 archive, SHA-256
-`68d0a9b11ef7e3c1ddfc5bcd400306ca66c3770dd67a22cb377d3aaaf32e8c66`.
+The exact pinned Windows payload is recorded in
+[`KATAGO_WINDOWS.md`](KATAGO_WINDOWS.md). That file is maintained by the
+weekly KataGo release workflow from GitHub's release asset metadata.
 The macOS payload includes the selected local KataGo binary and its non-system
 dynamic-library dependencies. A release must add the exact license texts for
 those resolved dependencies; this file records sources but is not yet a
