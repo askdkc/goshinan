@@ -1,5 +1,5 @@
 {
-  "kataGoVersion": "1.17.2",
+  "kataGoVersion": "1.18.1",
   "humanModelVersion": "b18c384nbt-humanv0",
   "platforms": {
     "darwin-arm64": {
@@ -380,9 +380,62 @@
     "win32-x64": {
       "binary": {
         "path": "bin/win32-x64/katago.exe",
-        "sha256": "REPLACE_WITH_SHA256"
+        "sha256": "6e2e0416fea6392369c13dfeef05d5a5dce4b7f506b96aa609dd3cafeb3ff440"
       },
-      "dependencies": [],
+      "dependencies": [
+        {
+          "path": "bin/win32-x64/bz2.dll",
+          "sha256": "ce4a0c4b2e8d4409efb9e882df0adeba4a7332ab5194483aff50a28efee27897"
+        },
+        {
+          "path": "bin/win32-x64/libcrypto-3-x64.dll",
+          "sha256": "1c2152bcb085a7a85b1e81a0a8cb8c353a4c02fe4bb3b46c5e8b75903b2d0cfd"
+        },
+        {
+          "path": "bin/win32-x64/libssl-3-x64.dll",
+          "sha256": "d29823911faf71b9d71aa7be306887a6d090dc11dff48e1d432ece66ad534229"
+        },
+        {
+          "path": "bin/win32-x64/msvcp140_1.dll",
+          "sha256": "206c931bf90fdad8816de3b5e2ef80b2bcaa9406c89ecc05fe6fddffe251e982"
+        },
+        {
+          "path": "bin/win32-x64/msvcp140_2.dll",
+          "sha256": "d50d7883f20d1dc6191768d3746f52dd9cac89c346ffaed5be1f110c2f34a838"
+        },
+        {
+          "path": "bin/win32-x64/msvcp140_atomic_wait.dll",
+          "sha256": "3d0cbfaa1bf3eecf5a3f4491d2960ee803cb994f30292c6adc4a07c498f60e2b"
+        },
+        {
+          "path": "bin/win32-x64/msvcp140_codecvt_ids.dll",
+          "sha256": "8a65c7596ef2e6938731f5a1058e7e40145b6d97967cc649231a076b9a608d78"
+        },
+        {
+          "path": "bin/win32-x64/msvcp140.dll",
+          "sha256": "7c26614e1d733892c2deac7e245ce115504b1d80592dd0a01b08e3e5a55f89ca"
+        },
+        {
+          "path": "bin/win32-x64/vcruntime140_1.dll",
+          "sha256": "a7146c08f89fe5b04541ab507cdb59ff7b44534d4ba3c668a426c6450a03434e"
+        },
+        {
+          "path": "bin/win32-x64/vcruntime140_threads.dll",
+          "sha256": "40f39e8cee5f5a531b4010e18b807e8fe265b908dc58f959ecb7ebc6ea6cb11a"
+        },
+        {
+          "path": "bin/win32-x64/vcruntime140.dll",
+          "sha256": "d1f4225df2cd877dbf130d5668a021dce3f94118455ff5ec952061c30afc9ce7"
+        },
+        {
+          "path": "bin/win32-x64/z.dll",
+          "sha256": "a07ca94d3843a64b8b916ed83899ad9029578f1a931ec088d81da82834459e0c"
+        },
+        {
+          "path": "bin/win32-x64/zip.dll",
+          "sha256": "0d88c137ddfaf3a506672cdc8da35658a1ea15fb5fd9d91950cb0658266e600e"
+        }
+      ],
       "normalModel": {
         "path": "models/normal.bin.gz",
         "sha256": "ff8940cbb77d6b3a4279a73332541f28fd2c0870a26fdd6a5272d309ce2cea0b"

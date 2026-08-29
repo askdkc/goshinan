@@ -1,7 +1,7 @@
 {
   "name": "goshinan",
   "productName": "Go Shinan",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "KataGoを利用するオフライン囲碁指導デスクトップアプリ",
   "author": "askdkc contributors",
   "main": ".webpack/main",

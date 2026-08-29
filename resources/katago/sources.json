@@ -25,11 +25,11 @@
     },
     "win32-x64": {
       "kind": "archive",
-      "version": "1.17.1",
-      "fileName": "katago-v1.17.1-eigenavx2-windows-x64.zip",
-      "url": "https://github.com/lightvector/KataGo/releases/download/v1.17.1/katago-v1.17.1-eigenavx2-windows-x64.zip",
-      "bytes": 5245487,
-      "sha256": "f13f1126575a22dc728e931011b1b2e404ce2d02b566876a44a01aea3d27e293"
+      "version": "1.18.1",
+      "fileName": "katago-v1.18.1-eigenavx2-windows-x64.zip",
+      "url": "https://github.com/lightvector/KataGo/releases/download/v1.18.1/katago-v1.18.1-eigenavx2-windows-x64.zip",
+      "bytes": 5899607,
+      "sha256": "0d62ffa41ee04dd89dd1b80fe45e306c837231cb1e2dccb4f5780d0ca7c313db"
     }
   }
 }
