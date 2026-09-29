@@ -51,7 +51,7 @@
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.4",
     "css-loader": "7.1.4",
-    "electron": "43.3.0",
+    "electron": "43.5.0",
     "eslint": "10.8.1",
     "prettier": "3.9.6",
     "style-loader": "4.0.0",
